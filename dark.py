@@ -12,7 +12,7 @@ class plotting:
         events = [0.0] * 0
         background=np.zeros(40)
         signal=np.zeros(40)
-        m=20*3.53
+        m=20*0.1766
         with open('recoilenergydata_EP219.csv') as csvfile:
             reader = csv.reader(csvfile, delimiter=',', quotechar='|')
             for row in reader:
@@ -41,15 +41,15 @@ class plotting:
                 if ((energy[i] < 5) or (energy[i] > 25)):
                     yPred.append(0)
                 elif ((energy[i] > 5) and (energy[i] < 15)):
-                    yPred.append(s * (energy[i] - 5))
+                    yPred.append(s* 20* (energy[i] - 5))
                 elif ((energy[i] > 15) or (energy[i] < 25)):
-                    yPred.append(s * (25 - energy[i]))
+                    yPred.append(s *20* (25 - energy[i]))
             read=yPred+1000*np.exp(xPred)
             # Calculate negative log likelihood
             LL = -np.sum(d*np.log(read)-read)
             return(LL)
 
-        init=0.8
+        init=0.5
         #x1 = np.linspace(0.0, 10.0, 5000.0)
         #plt.plot(x1,line(x1,events,energy)
         results = minimize(line, init,args=(events,energy), method='Nelder-Mead')  # minimization
