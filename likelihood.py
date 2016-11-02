@@ -36,23 +36,40 @@ print results.x#best fit params
 #1 and 2 sigma part...
 v1=line((results.x))+1
 v2=line((results.x))+2
-x1 = np.linspace(20.0, 25.0, 5000.0)
-y1 = np.linspace(950.0, 1100.0, 5000.0)
-l1x =[]
-l1y =[]
-for i in range(0,5000,1):
-    d=[x1[i],y1[i],results.x[2]]
-    m=line(d)
-    if(abs(m-v1)<=0.5):
-        l1x.append(x1[i])
-        l1y.append(y1[i])
+x1 = np.linspace(15.0, 30.0, 750.0)
+y1 = np.linspace(950.0, 1050.0, 750.0)
+l1 =np.ndarray(shape=(750,750),dtype=float)
+X, Y = np.meshgrid(x1, y1)
+# for i in range(0,750,1):
+#     for j in range(0,750,1):
+#         d=[x1[i],y1[j],results.x[2]]
+#         m=line(d)
+#
+#         if abs(m-v1)<=0.1:
+#             l1[i, j]=1
+#         elif abs(m-v2)<=0.1:
+#             l1[i, j]=1
+a = np.sum(temperature)
+t1 = np.square(temperature)
+b = np.sum(t1)
+c = np.sum(length)
+t2 = np.multiply(temperature,length)
+d = np.sum(t2)
+t3 = np.square(length)
+e = np.sum(t3)
 
-
-X, Y = np.meshgrid(l1x, l1y)
+F = ((X**2)*b+(50*(Y**2))+(e)+(2*X*Y*a)-(2*Y*c)-(2*X*d))
+s=0
+for i in range (0,50,1):
+   s+= (length[i]-(results.x[0]*temperature[i]+results.x[1]))**2
+G1 = (2 * (results.x[2]**2)) + s
+G2 = (4 * 2 * (results.x[2]**2)) + s
+ #seting up a symmertrical meshgrid
 plt.figure()
-plt.contour(X, Y)#contour map
-plt.colorbar()
-plt.title('Contour Map of Probability Distribution Function of x and y')
+plot1 = plt.contour(X, Y,(F-G1),[0],colors ='y')#contour map
+plot2 = plt.contour(X,Y,(F-G2),[0])
+labels=['1-Sigma Interval','2-Sigma Interval']
+plt.title('Contour Map of Error Intervals')
 plt.xlabel('x')
 plt.ylabel('y')
 plt.show()
