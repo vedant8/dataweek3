@@ -57,13 +57,32 @@ t2 = np.multiply(temperature,length)
 d = np.sum(t2)
 t3 = np.square(length)
 e = np.sum(t3)
-
+c1=results.x[0]
+c2=results.x[1]
 F = ((X**2)*b+(50*(Y**2))+(e)+(2*X*Y*a)-(2*Y*c)-(2*X*d))
 s=0
 for i in range (0,50,1):
    s+= (length[i]-(results.x[0]*temperature[i]+results.x[1]))**2
 G1 = (2 * (results.x[2]**2)) + s
 G2 = (4 * 2 * (results.x[2]**2)) + s
+#errorinterval on m
+coeff=[]
+coeff.append(b)
+coeff.append(2*a*c2-2*d)
+coeff.append(50*c2**2-2*c*c2+e-s-results.x[2])
+m12 = np.roots(coeff)
+m1 = min(m12[0],m12[1])
+m2 = max(m12[0],m12[1])
+#error interval in c
+coeff=[]
+coeff.append(50)
+coeff.append(2*a*c1-2*c)
+coeff.append(-2*d*c1+b*c1**2+e-s-results.x[2])
+print ("Error interval for m is [%5.2f,%5.2f]")%(m1,m2)
+i12 = np.roots(coeff)
+i1 = min(i12[0],i12[1])
+i2 = max(i12[0],i12[1])
+print ("Error interval for c is [%5.2f,%5.2f]")%(i1,i2)
  #seting up a symmertrical meshgrid
 plt.figure()
 plot1 = plt.contour(X, Y,(F-G1),[0],colors ='y')#contour map
@@ -73,3 +92,4 @@ plt.title('Contour Map of Error Intervals')
 plt.xlabel('x')
 plt.ylabel('y')
 plt.show()
+
