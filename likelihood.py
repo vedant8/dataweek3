@@ -88,7 +88,7 @@ plt.figure()
 plot1 = plt.contour(X, Y,(F-G1),[0],colors ='y')#contour map
 plot2 = plt.contour(X,Y,(F-G2),[0])
 labels=['1-Sigma Interval','2-Sigma Interval']
-plt.title('Contour Map of Error Intervals')
+plt.title('Contour Map of error regions')
 plt.xlabel('x')
 plt.ylabel('y')
 plt.show()
