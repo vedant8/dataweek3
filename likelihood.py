@@ -87,7 +87,7 @@ print ("Error interval for c is [%5.2f,%5.2f]")%(i1,i2)
 plt.figure()
 plot1 = plt.contour(X, Y,(F-G1),[0],colors ='y')#contour map
 plot2 = plt.contour(X,Y,(F-G2),[0])
-labels=['1-Sigma Interval','2-Sigma Interval']
+labels=['1-Sigma Region','2-Sigma Region']
 plot1.collections[0].set_label(labels[0])
 plot2.collections[0].set_label(labels[1])
 
