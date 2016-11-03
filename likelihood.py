@@ -34,56 +34,25 @@ initParams = [1.0, 1000.0, 0.5]
 results = minimize(line, initParams, method='Nelder-Mead')#minimization
 print results.x#best fit params
 #1 and 2 sigma part...
-v1=line((results.x))+1
-v2=line((results.x))+2
-x1 = np.linspace(15.0, 30.0, 750.0)
-y1 = np.linspace(950.0, 1050.0, 750.0)
+x1 = np.linspace(20.0, 26.0, 750.0)
+y1 = np.linspace(970.0, 1020.0, 750.0)
 l1 =np.ndarray(shape=(750,750),dtype=float)
 X, Y = np.meshgrid(x1, y1)
-# for i in range(0,750,1):
-#     for j in range(0,750,1):
-#         d=[x1[i],y1[j],results.x[2]]
-#         m=line(d)
-#
-#         if abs(m-v1)<=0.1:
-#             l1[i, j]=1
-#         elif abs(m-v2)<=0.1:
-#             l1[i, j]=1
-a = np.sum(temperature)
-t1 = np.square(temperature)
-b = np.sum(t1)
-c = np.sum(length)
-t2 = np.multiply(temperature,length)
-d = np.sum(t2)
-t3 = np.square(length)
-e = np.sum(t3)
-c1=results.x[0]
-c2=results.x[1]
-F = ((X**2)*b+(50*(Y**2))+(e)+(2*X*Y*a)-(2*Y*c)-(2*X*d))
-s=0
+sumX = np.sum(temperature)
+sumX2 = np.sum(np.square(temperature))
+sumY = np.sum(length)
+sumXY = np.sum(np.multiply(temperature,length))
+sumY2 = np.sum(np.square(length))
+m=results.x[0]
+c=results.x[1]
+F = ((X**2)*sumX2+(50*(Y**2))+(2*X*Y*sumX)-(2*Y*sumY)-(2*X*sumXY) + sumY2)
+sum = 0
 for i in range (0,50,1):
-   s+= (length[i]-(results.x[0]*temperature[i]+results.x[1]))**2
-G1 = (2 * (results.x[2]**2)) + s
-G2 = (4 * 2 * (results.x[2]**2)) + s
-#errorinterval on m
-coeff=[]
-coeff.append(b)
-coeff.append(2*a*c2-2*d)
-coeff.append(50*c2**2-2*c*c2+e-s-results.x[2])
-m12 = np.roots(coeff)
-m1 = min(m12[0],m12[1])
-m2 = max(m12[0],m12[1])
-#error interval in c
-coeff=[]
-coeff.append(50)
-coeff.append(2*a*c1-2*c)
-coeff.append(-2*d*c1+b*c1**2+e-s-results.x[2])
-print ("Error interval for m is [%5.2f,%5.2f]")%(m1,m2)
-i12 = np.roots(coeff)
-i1 = min(i12[0],i12[1])
-i2 = max(i12[0],i12[1])
-print ("Error interval for c is [%5.2f,%5.2f]")%(i1,i2)
- #seting up a symmertrical meshgrid
+   sum += (length[i]-(m*temperature[i]+c))**2
+G1 = (2 * (results.x[2]**2)) + sum
+G2 = (2 * 2 * (results.x[2]**2)) + sum
+
+#seting up a symmertrical meshgrid
 plt.figure()
 plot1 = plt.contour(X, Y,(F-G1),[0],colors ='y')#contour map
 plot2 = plt.contour(X,Y,(F-G2),[0])
@@ -96,4 +65,24 @@ plt.title('Contour Map of error regions')
 plt.xlabel('Coefficient of Linear Expansion')
 plt.ylabel('Length')
 plt.show()
+
+#errorinterval on m
+coeff=[]
+coeff.append(sumX2)
+coeff.append(2*c*sumX - 2*sumXY)
+coeff.append(50*c**2 - 2*c*sumY + sumY2 - sum - 2*results.x[2]**2)
+m12 = np.roots(coeff)
+m1 = min(m12[0],m12[1])
+m2 = max(m12[0],m12[1])
+#error interval in c
+coeff=[]
+coeff.append(50)
+coeff.append(2*m*sumX-2*sumY)
+coeff.append(-2*m*sumXY + sumX2*m**2 + sumY2 - sum - 2*results.x[2]**2)
+print ("Error interval for m is [%5.2f,%5.2f]")%(m1,m2)
+c12 = np.roots(coeff)
+c1 = min(c12[0],c12[1])
+c2 = max(c12[0],c12[1])
+print ("Error interval for c is [%5.2f,%5.2f]")%(c1,c2)
+
 
