@@ -127,3 +127,14 @@ for i in range(int(10 ** 5 * results.x), 10 ** 5):
 
 print "The 1 sigma interval is ( %s, %s )" %(OneSigma[0], OneSigma[1])
 
+
+#################################################################################################
+#                              Predicting the existence of Dark Matter                          #
+#################################################################################################
+
+loglikeliBack = -line(0, events, energy)
+loglikeliSigPlusBack = -line(results.x, events, energy)
+print loglikeliBack
+print loglikeliSigPlusBack
+ratio = np.exp(loglikeliBack - loglikeliSigPlusBack)
+print ratio
