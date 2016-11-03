@@ -88,8 +88,12 @@ plt.figure()
 plot1 = plt.contour(X, Y,(F-G1),[0],colors ='y')#contour map
 plot2 = plt.contour(X,Y,(F-G2),[0])
 labels=['1-Sigma Interval','2-Sigma Interval']
+plot1.collections[0].set_label(labels[0])
+plot2.collections[0].set_label(labels[1])
+
+plt.legend(loc = 'upper right')
 plt.title('Contour Map of error regions')
-plt.xlabel('x')
-plt.ylabel('y')
+plt.xlabel('Coefficient of Linear Expansion')
+plt.ylabel('Length')
 plt.show()
 
