@@ -91,7 +91,7 @@ def line(param, d, energy):
     return LL
 
 # Plotting the log likelihood function between 0 to 100
-sigma = np.arange(0, 10, 0.01)
+sigma = np.arange(0, 10, 0.1)
 for i in range(len(sigma)):
     plt.plot(sigma[i], -line(sigma[i], events, energy), 'ro')
 plt.title("Log Likelihood function for the theory parameter sigma")
